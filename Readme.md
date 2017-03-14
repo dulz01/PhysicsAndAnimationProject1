@@ -9,7 +9,7 @@ The purpose of this project is to recreate Babbage's Difference Engine Number 2'
 ## The Babbage Difference Engine Number 2
 The Babbage Difference Engine Number 2 contains 8 columns which are numeric storage units. Each column has thirty one gears called figure wheels that are used for the calculation. The storage unit starts from the least significant digit at the bottom and the most significant digit at the top. Negative numbers are dealt with using the 10s complement method. Each figure wheel contains 40 teeth and each quarter contains numbers from 0 to 9. Numbers are added by having one wheel be the Accumulator and the second being an Addend.
 
-![alt text](screenshots/NumericStorageUnits.png "The numeric storage units in the Difference engine. Screenshot from MechanicalComputing on Youtube")
+![alt text](screenshots/NumericStorageUnits.PNG "The numeric storage units in the Difference engine. Screenshot from MechanicalComputing on Youtube")
 
 If you put two figure wheels together and turn them by a certain amount, the accumulator wheel will contain the result of the rotation but the Addend wheel will lose its value in the process. To counteract this, Babbage added a third wheel called the Sector wheel which restores the value to the Addend wheel which is needed for the second phase of calculations.
 
@@ -22,7 +22,7 @@ The Unreal project uses static meshes from qwertyzzz18 who published the 3D mode
 
 Problems I encountered had to do with collision detection and deciding on what objects should simulate physics. For collision detection, Unreal's implementation when auto-generating doesn't take into account the teeth of the gear Although it follows the shape of the wheel. There was an option to have complex geometry as the collision geometry but this feature doesn't allow for physics to be simulated on the object. The only option left was to create the collision boxes myself. I didn't add collision geometry around the whole shape as I don't think anything else will interact with any other part other than the teeth of the gears. If the situation that needs these other parts to be interacted with come up then I could add more collision shapes into the static mesh.
 
-![alt text](screenshots/CustomCollisionBoxes.png "Collision boxes represented by the purple lines")
+![alt text](screenshots/CustomCollisionBoxes.PNG "Collision boxes represented by the purple lines")
 
 Other issues I found was that the sector wheel's pivot point is not at the origin point so I had to open the file in blender, realign it and then reimport it into the Unreal project. This was easily done and I didn't have to change any structures that I made in Unreal.
 
@@ -31,23 +31,23 @@ During planning I was deciding on how to manipulate the behaviour of the Differe
 
 The way I implemented the blueprint for the sector wheel is to have a timeline that increments two floats, one for the angle of rotation and another for the height. This code runs off the EventTick so that means that the values are calculated every frame. 
 
-![alt text](screenshots/SectorWheelBlueprints001.png "Two branches to check if the sector wheel is active and if it needs to revert its rotation")
+![alt text](screenshots/SectorWheelBlueprints001.PNG "Two branches to check if the sector wheel is active and if it needs to revert its rotation")
 
 I set the height to be applied after the rotation is done but that means that there won't be any animation as it changes its height.
 
-![alt text](screenshots/SectorWheelBlueprints002.png "The rotation being applied")
+![alt text](screenshots/SectorWheelBlueprints002.PNG "The rotation being applied")
 
 To run the reverse rotation for the sector wheel, I set a bool that checks a branch if it is flagged and runs the timeline in reverse. 
 
-![alt text](screenshots/SectorWheelBlueprints003.png "The first instance where height is applied to the position")
+![alt text](screenshots/SectorWheelBlueprints003.PNG "The first instance where height is applied to the position")
 
 After the rotation has been reverted, the height is applied once again and the sector wheel is set to inactive. This prevents the timeline from applying anymore changes to its rotation or positions. At this point this Sector wheel calls a function in the second phase Sector Wheel to set it to active.
 
-![alt text](screenshots/SectorWheelBlueprints004.png "The second time the height is applied to the position and activating the second phase sector wheel.")
+![alt text](screenshots/SectorWheelBlueprints004.PNG "The second time the height is applied to the position and activating the second phase sector wheel.")
 
 The second phase Sector Wheel is similar to the first phase but it runs the rotation timeline in reverse order. At the end of this blueprint, it resets the first phase sector wheel to active as well. This creates a loop between the first phase sector wheel and the second phase sector wheel, which is good to demonstrate the mechanics of the engine.
 
-![alt text](screenshots/FullSectorWheelBlueprint.png "The full sector wheel blueprint.")
+![alt text](screenshots/FullSectorWheelBlueprint.PNG "The full sector wheel blueprint.")
 
 ## Conclusion
 The missing piece of the demo is the carry mechanism to carry numbers up the column. Ways to improve the demo would be to reduce the number of polygons on the imported models, either make the timeline code more general to include both phase 1 and phase 2 calculations or to make it so all the gears are physic objects and apply rotation indirectly through a different part that would closely emulate how the original Difference Engine works.
